@@ -6,7 +6,7 @@ import javax.persistence.*;
 public class Book {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue
     @Column(updatable = false)
     private int bookId;
     private String isbn;

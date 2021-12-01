@@ -3,32 +3,49 @@ package com.example.jpaworkshop.data.dao;
 import com.example.jpaworkshop.data.interfaces.BookDAO;
 import com.example.jpaworkshop.model.entity.Book;
 
+import javax.persistence.EntityManager;
 import java.util.Collection;
 import java.util.Optional;
 
 public class BookDAORepository implements BookDAO {
+
+    private final EntityManager entityManager;
+
+    public BookDAORepository(EntityManager entityManager) {
+        this.entityManager = entityManager;
+    }
+
+
     @Override
     public Book create(Book entity) {
-        return null;
+        if(entity == null) throw new IllegalArgumentException("Entity is null");
+        entityManager.persist(entity);
+
+        return entity;
     }
 
     @Override
     public Book update(Book entity) {
-        return null;
+        if(entity == null) throw new IllegalArgumentException("Entity is null");
+        entityManager.merge(entity);
+
+        return entity;
     }
 
     @Override
-    public Optional<Book> findById(Integer integer) {
-        return Optional.empty();
+    public Optional<Book> findById(Integer id) {
+        return Optional.ofNullable(entityManager.find(Book.class, id));
     }
 
     @Override
     public Collection<Book> findAll() {
-        return null;
+        return entityManager.createQuery("SELECT b FROM Book b", Book.class)
+                .getResultList();
     }
 
     @Override
-    public void delete(Integer integer) {
+    public void delete(Integer id) {
+        findById(id).ifPresent(entityManager::remove);
 
     }
 }

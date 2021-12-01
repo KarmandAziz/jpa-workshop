@@ -12,7 +12,7 @@ import static com.example.jpaworkshop.model.constants.EntityConstants.UUID_GENER
 public class Details {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue
     @Column(updatable = false)
     private int detailsId;
     @Column(unique = true)
