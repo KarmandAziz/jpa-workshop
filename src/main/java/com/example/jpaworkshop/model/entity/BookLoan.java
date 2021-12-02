@@ -8,7 +8,7 @@ import java.util.Objects;
 public class BookLoan {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(updatable = false)
     private int loanId;
     private LocalDate loanDate;
