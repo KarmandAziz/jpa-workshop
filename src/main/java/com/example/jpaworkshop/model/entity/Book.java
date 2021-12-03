@@ -15,14 +15,28 @@ public class Book {
     private String isbn;
     @Column(length = 100)
     private String title;
+    private boolean available = true;
+    @Column()
     private int maxLoanDays;
     @ManyToMany(
-            cascade = {CascadeType.DETACH,CascadeType.REFRESH},
+            cascade = CascadeType.ALL,
             fetch = FetchType.LAZY
     )
     private Set<Author> authors = new HashSet<>();
 
     public Book() {
+    }
+
+    public boolean isAvailable() {
+        return available;
+    }
+
+    public void setAvailable(boolean available) {
+        this.available = available;
+    }
+
+    public void setAuthors(Set<Author> authors) {
+        this.authors = authors;
     }
 
     public Book(int bookId, String isbn, String title, int maxLoanDays) {
@@ -37,7 +51,7 @@ public class Book {
         return authors;
     }
 
-    public void setAuthors(Set<Author> authors) {
+    public void addAuthors(Set<Author> authors) {
         if(authors == null) authors = new HashSet<>();
         if(authors.isEmpty()){
             if(this.authors != null){
@@ -62,6 +76,7 @@ public class Book {
     }
 
     public void setIsbn(String isbn) {
+        if(isbn == null) throw new IllegalArgumentException("Isbn was null");
         this.isbn = isbn;
     }
 
@@ -70,6 +85,7 @@ public class Book {
     }
 
     public void setTitle(String title) {
+        if(title == null) throw new IllegalArgumentException("Title was null");
         this.title = title;
     }
 

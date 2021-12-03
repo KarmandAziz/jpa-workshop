@@ -29,11 +29,10 @@ public class AppUser {
     @JoinColumn(name = "fk_details_id", table = "app_user")
     private Details userDetails;
     @OneToMany(
-            cascade = {CascadeType.REFRESH,  CascadeType.DETACH, CascadeType.PERSIST, CascadeType.MERGE},
+            cascade = {CascadeType.REFRESH, CascadeType.DETACH, CascadeType.PERSIST, CascadeType.MERGE},
             fetch = FetchType.LAZY,
             orphanRemoval = true,
             mappedBy = "borrower"
-
     )
     private List<BookLoan> loans = new ArrayList<>();
 
@@ -61,6 +60,7 @@ public class AppUser {
 
     public void setLoans(List<BookLoan> loans) {
         if(loans == null) loans = new ArrayList<>();
+
         if(loans.isEmpty()){
             if(this.loans != null){
                 this.loans.forEach(bookLoan -> bookLoan.setBorrower(null));
@@ -71,12 +71,16 @@ public class AppUser {
         this.loans = loans;
     }
     public void addLoan(BookLoan bookLoan){
-        if(bookLoan == null) throw new IllegalArgumentException("Book loan was null");
+        if(bookLoan == null) throw new IllegalArgumentException("BookLoan was null");
         if(loans == null) loans = new ArrayList<>();
         if(!loans.contains(bookLoan)){
-            loans.add(bookLoan);
-            bookLoan.setBorrower(this);
+            if(bookLoan.getBook().isAvailable()){
+                loans.add(bookLoan);
+                bookLoan.setBorrower(this);
+                bookLoan.getBook().setAvailable(false);
+            }
         }
+
     }
 
     public void removeLoan(BookLoan bookLoan){

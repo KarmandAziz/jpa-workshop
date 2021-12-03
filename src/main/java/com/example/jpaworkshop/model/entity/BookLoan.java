@@ -40,6 +40,7 @@ public class BookLoan {
         this.book = book;
     }
 
+
     public int getLoanId() {
         return loanId;
     }
