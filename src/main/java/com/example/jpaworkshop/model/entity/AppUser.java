@@ -4,6 +4,9 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 import static com.example.jpaworkshop.model.constants.EntityConstants.GENERATOR;
 import static com.example.jpaworkshop.model.constants.EntityConstants.UUID_GENERATOR;
@@ -12,7 +15,7 @@ import static com.example.jpaworkshop.model.constants.EntityConstants.UUID_GENER
 public class AppUser {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(updatable = false)
     private int AppUserId;
     @Column(length = 30, unique = true)
@@ -25,6 +28,14 @@ public class AppUser {
     )
     @JoinColumn(name = "fk_details_id", table = "app_user")
     private Details userDetails;
+    @OneToMany(
+            cascade = {CascadeType.REFRESH,  CascadeType.DETACH, CascadeType.PERSIST, CascadeType.MERGE},
+            fetch = FetchType.LAZY,
+            orphanRemoval = true,
+            mappedBy = "borrower"
+
+    )
+    private List<BookLoan> loans = new ArrayList<>();
 
     public AppUser() {
     }
@@ -44,6 +55,38 @@ public class AppUser {
         this.regDate = regDate;
     }
 
+    public List<BookLoan> getLoans() {
+        return loans;
+    }
+
+    public void setLoans(List<BookLoan> loans) {
+        if(loans == null) loans = new ArrayList<>();
+        if(loans.isEmpty()){
+            if(this.loans != null){
+                this.loans.forEach(bookLoan -> bookLoan.setBorrower(null));
+            }
+        }else{
+            loans.forEach(bookLoan -> bookLoan.setBorrower(this));
+        }
+        this.loans = loans;
+    }
+    public void addLoan(BookLoan bookLoan){
+        if(bookLoan == null) throw new IllegalArgumentException("Book loan was null");
+        if(loans == null) loans = new ArrayList<>();
+        if(!loans.contains(bookLoan)){
+            loans.add(bookLoan);
+            bookLoan.setBorrower(this);
+        }
+    }
+
+    public void removeLoan(BookLoan bookLoan){
+        if(bookLoan == null) throw new IllegalArgumentException("Book loan was null");
+        if(loans == null) loans = new ArrayList<>();
+        if(this.loans.contains(bookLoan)){
+            loans.remove(bookLoan);
+            bookLoan.setBorrower(this);
+        }
+    }
 
     public int getAppUserId() {
         return AppUserId;
@@ -75,5 +118,27 @@ public class AppUser {
 
     public void setRegDate(LocalDate regDate) {
         this.regDate = regDate;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        AppUser appUser = (AppUser) o;
+        return AppUserId == appUser.AppUserId && Objects.equals(username, appUser.username);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(AppUserId, username);
+    }
+
+    @Override
+    public String toString() {
+        return "AppUser{" +
+                "AppUserId=" + AppUserId +
+                ", username='" + username + '\'' +
+                ", regDate=" + regDate +
+                '}';
     }
 }

@@ -1,7 +1,10 @@
 package com.example.jpaworkshop.model.entity;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
+
+
 @Entity
 public class Author {
 
@@ -9,15 +12,13 @@ public class Author {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(updatable = false)
     private int authorId;
-    @Column(length = 30)
     private String firstName;
-    @Column(length = 30)
     private String lastName;
     @ManyToMany(
             cascade = {CascadeType.DETACH,CascadeType.REFRESH},
             fetch = FetchType.LAZY
     )
-    private Set<Book> writtenBooks;
+    private Set<Book> writtenBooks = new HashSet<>();
 
     public Author() {
     }
@@ -28,6 +29,7 @@ public class Author {
         this.lastName = lastName;
         this.writtenBooks = writtenBooks;
     }
+
 
     public int getAuthorId() {
         return authorId;
@@ -54,10 +56,20 @@ public class Author {
     }
 
     public Set<Book> getWrittenBooks() {
+        if(writtenBooks == null) writtenBooks = new HashSet<>();
         return writtenBooks;
     }
 
     public void setWrittenBooks(Set<Book> writtenBooks) {
+        if(writtenBooks == null) writtenBooks = new HashSet<>();
+        if(writtenBooks.isEmpty()){
+            if(this.writtenBooks != null){
+                this.writtenBooks.forEach(book -> book.getAuthors().remove(this));
+            }
+        }else{
+            writtenBooks.forEach(book -> book.getAuthors().add(this));
+        }
         this.writtenBooks = writtenBooks;
     }
+
 }

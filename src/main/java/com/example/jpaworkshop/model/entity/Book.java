@@ -20,7 +20,7 @@ public class Book {
             cascade = {CascadeType.DETACH,CascadeType.REFRESH},
             fetch = FetchType.LAZY
     )
-    private Set<Author> authors;
+    private Set<Author> authors = new HashSet<>();
 
     public Book() {
     }

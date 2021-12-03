@@ -2,13 +2,15 @@ package com.example.jpaworkshop.model.entity;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
 public class BookLoan {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(updatable = false)
     private int loanId;
     private LocalDate loanDate;
@@ -25,14 +27,17 @@ public class BookLoan {
     @JoinColumn(name = "fk_book_id", table = "book_loan")
     private Book book;
 
+
     public BookLoan() {
     }
 
-    public BookLoan(int loanId, LocalDate loanDate, LocalDate dueDate, boolean returned) {
+    public BookLoan(int loanId, LocalDate loanDate, LocalDate dueDate, boolean returned, AppUser borrower, Book book) {
         this.loanId = loanId;
         this.loanDate = loanDate;
         this.dueDate = dueDate;
         this.returned = returned;
+        this.borrower = borrower;
+        this.book = book;
     }
 
     public int getLoanId() {
@@ -48,6 +53,7 @@ public class BookLoan {
     }
 
     public void setLoanDate(LocalDate loanDate) {
+        if(loanDate == null) throw new IllegalArgumentException("loan date was null");
         this.loanDate = loanDate;
     }
 
@@ -56,6 +62,7 @@ public class BookLoan {
     }
 
     public void setDueDate(LocalDate dueDate) {
+        if(loanDate == null) throw new IllegalArgumentException("loan date was null");
         this.dueDate = dueDate;
     }
 
