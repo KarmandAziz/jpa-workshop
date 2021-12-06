@@ -31,16 +31,12 @@ class BookDAORepositoryTest {
 
     @BeforeEach
     void setUp() {
-        List<Book> books = books().stream()
-                .map(entityManager::persist)
-                .collect(Collectors.toList());
-        book = books.get(0);
     }
 
     @Test
     void create_persist() {
 
-        assertNotNull(result);
+
     }
 
     @Test
