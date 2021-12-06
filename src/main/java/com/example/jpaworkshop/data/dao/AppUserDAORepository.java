@@ -2,6 +2,7 @@ package com.example.jpaworkshop.data.dao;
 
 import com.example.jpaworkshop.data.interfaces.AppUserDAO;
 import com.example.jpaworkshop.model.entity.AppUser;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,7 +15,7 @@ import java.util.Optional;
 public class AppUserDAORepository implements AppUserDAO {
 
     private final EntityManager entityManager;
-
+    @Autowired
     public AppUserDAORepository(EntityManager entityManager) {
         this.entityManager = entityManager;
     }

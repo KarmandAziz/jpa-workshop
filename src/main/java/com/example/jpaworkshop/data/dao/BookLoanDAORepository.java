@@ -2,6 +2,7 @@ package com.example.jpaworkshop.data.dao;
 
 import com.example.jpaworkshop.data.interfaces.BookLoanDAO;
 import com.example.jpaworkshop.model.entity.BookLoan;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,7 +14,7 @@ import java.util.Optional;
 public class BookLoanDAORepository implements BookLoanDAO {
 
     private final EntityManager entityManager;
-
+    @Autowired
     public BookLoanDAORepository(EntityManager entityManager) {
         this.entityManager = entityManager;
     }

@@ -6,16 +6,17 @@ import java.util.Set;
 
 
 @Entity
+@Table(name="author")
 public class Author {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(updatable = false)
+    @Column(updatable = false, name = "id")
     private int authorId;
     private String firstName;
     private String lastName;
     @ManyToMany(
-            cascade = {CascadeType.DETACH,CascadeType.REFRESH},
+            cascade = {CascadeType.REFRESH, CascadeType.DETACH},
             fetch = FetchType.LAZY
     )
     private Set<Book> writtenBooks = new HashSet<>();

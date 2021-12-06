@@ -2,6 +2,7 @@ package com.example.jpaworkshop.data.dao;
 
 import com.example.jpaworkshop.data.interfaces.AuthorDAO;
 import com.example.jpaworkshop.model.entity.Author;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,7 +14,7 @@ import java.util.Optional;
 public class AuthorDAORepository implements AuthorDAO {
 
     private final EntityManager entityManager;
-
+    @Autowired
     public AuthorDAORepository(EntityManager entityManager) {
         this.entityManager = entityManager;
     }

@@ -9,11 +9,12 @@ import static com.example.jpaworkshop.model.constants.EntityConstants.GENERATOR;
 import static com.example.jpaworkshop.model.constants.EntityConstants.UUID_GENERATOR;
 
 @Entity
+@Table(name="details")
 public class Details {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(updatable = false)
+    @Column(updatable = false, name = "id")
     private int detailsId;
     @Column(unique = true)
     private String email;

@@ -7,11 +7,12 @@ import java.util.List;
 import java.util.Objects;
 
 @Entity
+@Table(name="book_loan")
 public class BookLoan {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(updatable = false)
+    @Column(updatable = false, name = "id")
     private int loanId;
     private LocalDate loanDate;
     private LocalDate dueDate;
