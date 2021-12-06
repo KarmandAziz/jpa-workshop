@@ -4,17 +4,16 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.Objects;
 
 import static com.example.jpaworkshop.model.constants.EntityConstants.GENERATOR;
 import static com.example.jpaworkshop.model.constants.EntityConstants.UUID_GENERATOR;
 
 @Entity
-@Table(name="details")
 public class Details {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(updatable = false, name = "id")
     private int detailsId;
     @Column(unique = true)
     private String email;
@@ -61,5 +60,28 @@ public class Details {
 
     public void setBirthDate(LocalDate birthDate) {
         this.birthDate = birthDate;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Details details = (Details) o;
+        return Objects.equals(email, details.email) && Objects.equals(name, details.name) && Objects.equals(birthDate, details.birthDate);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(email, name, birthDate);
+    }
+
+    @Override
+    public String toString() {
+        return "Details{" +
+                "detailsId=" + detailsId +
+                ", email='" + email + '\'' +
+                ", name='" + name + '\'' +
+                ", birthDate=" + birthDate +
+                '}';
     }
 }

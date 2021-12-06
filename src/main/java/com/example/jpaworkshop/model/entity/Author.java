@@ -2,11 +2,11 @@ package com.example.jpaworkshop.model.entity;
 
 import javax.persistence.*;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 
 @Entity
-@Table(name="author")
 public class Author {
 
     @Id
@@ -16,8 +16,9 @@ public class Author {
     private String firstName;
     private String lastName;
     @ManyToMany(
-            cascade = {CascadeType.REFRESH, CascadeType.DETACH},
-            fetch = FetchType.LAZY
+            cascade = {CascadeType.DETACH, CascadeType.REFRESH, CascadeType.MERGE, CascadeType.PERSIST},
+            fetch = FetchType.LAZY,
+            mappedBy = "authors"
     )
     private Set<Book> writtenBooks = new HashSet<>();
 
@@ -73,4 +74,26 @@ public class Author {
         this.writtenBooks = writtenBooks;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Author author = (Author) o;
+        return authorId == author.authorId && Objects.equals(firstName, author.firstName) && Objects.equals(lastName, author.lastName);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(authorId, firstName, lastName);
+    }
+
+    @Override
+    public String toString() {
+        return "Author{" +
+                "authorId=" + authorId +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", writtenBooks=" + writtenBooks +
+                '}';
+    }
 }

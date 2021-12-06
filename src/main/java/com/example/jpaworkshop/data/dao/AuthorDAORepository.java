@@ -14,6 +14,7 @@ import java.util.Optional;
 public class AuthorDAORepository implements AuthorDAO {
 
     private final EntityManager entityManager;
+
     @Autowired
     public AuthorDAORepository(EntityManager entityManager) {
         this.entityManager = entityManager;

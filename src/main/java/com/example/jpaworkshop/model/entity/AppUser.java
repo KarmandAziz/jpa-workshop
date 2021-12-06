@@ -12,7 +12,6 @@ import static com.example.jpaworkshop.model.constants.EntityConstants.GENERATOR;
 import static com.example.jpaworkshop.model.constants.EntityConstants.UUID_GENERATOR;
 
 @Entity
-@Table(name="app_user")
 public class AppUser {
 
     @Id
